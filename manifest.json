@@ -1,0 +1,11 @@
+{
+  "name": "SaveYourLuckBruh",
+  "version_number": "0.0.0",
+  "website_url": "https://github.com/Vapok/SaveYourLuckBruh",
+  "description": "Persists vanilla Valheim bad luck protection across game sessions and world transitions.",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2350",
+    "ValheimModding-Jotunn-2.30.2",
+    "ValheimModding-YamlDotNet-16.3.1"
+  ]
+}
