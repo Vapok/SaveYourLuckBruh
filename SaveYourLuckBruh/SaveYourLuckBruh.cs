@@ -21,7 +21,7 @@ namespace SaveYourLuckBruh;
 [BepInDependency("com.ValheimModding.YamlDotNetDetector")]
 public class SaveYourLuckBruh : BaseUnityPlugin, IPluginInfo
 {
-    private const string _pluginId = "vapok.mods.saveyourluckbruh";
+    private const string _pluginId = "vapok.mods.SaveYourLuckBruh";
     private const string _displayName = "SaveYourLuckBruh";
     private const string _version = "0.0.0";
     public static bool ValheimAwake;

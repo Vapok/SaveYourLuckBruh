@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🛡️ SaveYourLuckBruh
+# 🍀 SaveYourLuckBruh
 
 ### *Persists vanilla Valheim pseudo-random drop counters so your bad luck equity is never lost across game sessions or world travels.*
 
@@ -14,7 +14,9 @@
 
 </div>
 
-**SaveYourLuckBruh** is a quality-of-life mod designed to enhance your Valheim gameplay experience.
+In Valheim, rare item drops (such as trophies and rare materials) feature an internal "bad luck protection" system designed to prevent prolonged dry streaks. However, in the vanilla game, this counter is stored purely in temporary memory and resets to zero every time you close the game.
+
+**SaveYourLuckBruh** fixes this by saving your bad luck progress directly into your character save file, preserving your hard-earned drop progress across restarts and across different worlds.
 
 ---
 
@@ -26,30 +28,37 @@
 
 </div>
 
-## 🛡️ Features
+## 🎯 The Problem
 
-* **Quality of Life Mechanics**: Streamlined gameplay mechanics with zero unnecessary overhead.
-* **Multiplayer & Dedicated Server Ready**: Works seamlessly in solo play, player-hosted sessions, and headless dedicated servers.
-* **Server-Synced Configuration**: Admin settings synchronize automatically from dedicated servers to connected clients.
-* **Clean Harmony Patches**: Uses non-destructive hooks with zero background polling overhead.
+Vanilla Valheim uses a hidden countdown (`s_pseudoCounter`) for any item with a drop rate of 30% or lower. Every time you kill an eligible creature without getting the rare item, the countdown ticks closer to a **guaranteed drop**.
+
+### Example: Hunting Cultist Trophies
+1. **The Math**: A Cultist Trophy has a base 10% drop chance. The game rolls an internal countdown between 1 and 20 kills.
+2. **Session 1**: You clear Frost Caves and defeat 18 Cultists without seeing a trophy drop. You are now 1 or 2 kills away from a guaranteed trophy.
+3. **The Flaw**: You log off for the night and close Valheim.
+4. **Session 2 (Vanilla)**: You boot up Valheim tomorrow. **Your 18 kills are gone.** The game re-rolls a brand-new countdown from scratch. If you repeatedly play in short 1–2 hour sessions, you might suffer dozens of dry kills because your bad luck equity never survives a game restart.
 
 ---
 
-## 🕹️ Controls Summary
+## 💡 The Solution
 
-| Action | Input / Control | Description |
-| :--- | :--- | :--- |
-| **Standard Interaction** | <kbd>E</kbd> | Default in-game interaction. |
+**SaveYourLuckBruh** automatically saves your active bad luck counters into your character's native custom save data (`Player.m_customData`):
+
+* 💾 **Persistent Across Restarts**: When you exit Valheim and launch it again the next day, your exact remaining countdown is restored.
+* 🌍 **World-Scoped Progress**: Counters are tracked per unique World ID. Hunting Cultists in your solo world will not bleed into or reset your progress on a multiplayer server.
+* ⚔️ **Attacker Attribution**: In co-op play, your bad luck countdown is only consumed when you (or your tamed pets) deliver the lethal blow—an ally landing a kill won't drain your personal bad luck equity.
+* 🛡️ **Zero Corrupted Saves**: Stored entirely within vanilla character fields. If you ever uninstall the mod, your character file (`.fch`) remains 100% intact and uncorrupted.
+* 🔌 **Client-Side Only**: Does not need to be installed on dedicated servers. Works seamlessly in singleplayer, co-op, or multiplayer servers without affecting unmodded players.
 
 ---
 
 ## ⚙️ Configuration
 
-Configuration settings are stored in `BepInEx/config/vapok.mods.saveyourluckbruh.cfg`.
+**SaveYourLuckBruh** is an install-and-forget mod. It requires no functional configuration or gameplay tweaking to work. 
 
-### Local Config
-* **Show Splash on Startup**: Toggles display of the mod overview window upon game launch (Default: `true`).
-* **Enable Anonymous Telemetry**: Toggles anonymous telemetry reporting to track active mod versions and crashes (Default: `true`).
+Standard logging settings (including debug logging) are available via `BepInEx/config/vapok.mods.SaveYourLuckBruh.cfg`:
+
+* **Enable Debug Mode**: Outputs detailed log statements to `LogOutput.log` showing when counters load, decrement, trigger drops, and save.
 
 ---
 
@@ -57,24 +66,4 @@ Configuration settings are stored in `BepInEx/config/vapok.mods.saveyourluckbruh
 
 * **BepInEx**: 5.4.2350 or later.
 * **Jotunn**: 2.30.2 or later.
-* Compatible with common inventory and building mods.
-
----
-
-## 📦 Installation
-
-### Mod Manager (Recommended)
-1. Install via **Gale**, **r2modman**, or **Thunderstore Mod Manager**.
-2. Dependencies (`BepInExPack_Valheim`, `Jotunn`) will download automatically.
-
-### Manual Installation
-1. Extract the downloaded `.zip` archive.
-2. Place the `SaveYourLuckBruh` folder into your `Valheim/BepInEx/plugins/` directory.
-3. Launch the game.
-
----
-
-## 💬 Feedback & Community
-
-* Report issues or request features on [GitHub](https://github.com/Vapok/SaveYourLuckBruh/issues).
-* Join the community on [Discord](https://discord.gg/5YAJkRFBXt) for discussions and support.
+* 100% compatible with all world, inventory, and creature mods.
