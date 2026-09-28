@@ -66,4 +66,3 @@ Standard logging settings (including debug logging) are available via `BepInEx/c
 
 * **BepInEx**: 5.4.2350 or later.
 * **Jotunn**: 2.30.2 or later.
-* 100% compatible with all world, inventory, and creature mods.
