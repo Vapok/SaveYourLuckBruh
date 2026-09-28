@@ -1,9 +1,14 @@
-# 0.0.0 - Development Inception
-* **Initial Project Architecture**:
-  * Established modular BepInEx plugin architecture utilizing `Vapok.Common` 3.21.1015 and `JotunnLib` 2.30.2.
-  * Implemented synchronized configuration pipeline inheriting from `ConfigSyncBase`.
-  * Configured `ILRepack` MSBuild task to internalize `Vapok.Valheim.Common.dll` into target assembly `SaveYourLuckBruh.dll`.
-* **Dedicated Server Safety**:
-  * Isolated client UI and game startup hooks using `GUIManager.IsHeadless()`.
-* **Game Reference Alignment**:
-  * Built against Valheim 1.0.16 publicized assemblies and Unity 6 (6000.0.75f1) engine runtime.
+# 1.0.0 - Initial Release
+* **Architecture & Persistence**:
+  * Serializes `CharacterDrop.s_pseudoCounter` into `Player.m_customData` scoped by `ZNet.instance.GetWorldUID()`.
+  * Harmony prefix on `Player.Save` serializes active countdowns to `.fch` binary storage.
+  * Harmony postfix on `Player.Load` and `Player.OnSpawned` restores world-specific counters.
+  * Harmony postfix on `Player.OnDestroy` clears in-memory counters to prevent cross-character contamination.
+  * Real-time cache synchronization on `CharacterDrop.GenerateDropList` postfix updates memory state on creature death.
+* **Multiplayer Safety**:
+  * Client-side only execution model; dedicated server compatible with no server install required.
+  * Non-destructive patches with zero return value modification on `GenerateDropList`.
+* **Dependencies & Tooling**:
+  * Compiled against Valheim 1.0.16 publicized assemblies and Unity 6 (`6000.0.75f1`).
+  * Merged with `Vapok.Valheim.Common` 3.23.1016 via `ILRepack`.
+  * Referenced `JotunnLib` 2.30.2.
