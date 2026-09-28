@@ -14,7 +14,7 @@ internal static class PlayerSpawnPatch
             return;
         }
 
-        if (__instance == Player.m_localPlayer && ZNet.instance != null)
+        if (__instance == Player.m_localPlayer && ZNet.instance != null && ZNet.m_world != null)
         {
             long worldUID = ZNet.instance.GetWorldUID();
             StorageManager.EnsureLoaded(__instance, worldUID);

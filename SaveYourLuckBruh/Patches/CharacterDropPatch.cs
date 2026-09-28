@@ -43,31 +43,7 @@ internal static class CharacterDropPatch
         bool isPlayerPet = attacker != null && attacker.IsTamed();
         bool isOtherPlayer = attacker != null && attacker.IsPlayer() && attacker != Player.m_localPlayer;
 
-        if (isOtherPlayer)
-        {
-            foreach (CharacterDrop.Drop drop in __instance.m_drops)
-            {
-                if (drop == null || drop.m_prefab == null)
-                {
-                    continue;
-                }
-
-                string prefabName = drop.m_prefab.name;
-                if (__state.InitialCounters.TryGetValue(prefabName, out Tuple<float, int> previousValue))
-                {
-                    CharacterDrop.s_pseudoCounter[prefabName] = previousValue;
-                }
-                else
-                {
-                    CharacterDrop.s_pseudoCounter.Remove(prefabName);
-                }
-            }
-
-            SaveYourLuckBruh.Log.Debug($"Drop generated for '{__instance.name}', but lethal blow was dealt by ally '{attacker.GetHoverName()}'. Local bad luck counter preserved.");
-            return;
-        }
-
-        string attackerLabel = isLocalPlayer ? "LocalPlayer" : (isPlayerPet ? "Pet" : "Environmental");
+        string attackerLabel = isLocalPlayer ? "LocalPlayer" : (isPlayerPet ? "Pet" : (isOtherPlayer ? $"Ally ({attacker.GetHoverName()})" : "Environmental"));
 
         foreach (CharacterDrop.Drop drop in __instance.m_drops)
         {
@@ -108,7 +84,7 @@ internal static class CharacterDropPatch
             }
         }
 
-        if (Player.m_localPlayer != null && ZNet.instance != null)
+        if (Player.m_localPlayer != null && ZNet.instance != null && ZNet.m_world != null)
         {
             long worldUID = ZNet.instance.GetWorldUID();
             StorageManager.UpdateMemoryCache(Player.m_localPlayer, worldUID);

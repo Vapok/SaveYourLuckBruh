@@ -14,7 +14,7 @@ internal static class PlayerSavePatch
             return;
         }
 
-        if (__instance == Player.m_localPlayer && ZNet.instance != null)
+        if (__instance == Player.m_localPlayer && ZNet.instance != null && ZNet.m_world != null)
         {
             long worldUID = ZNet.instance.GetWorldUID();
             StorageManager.SaveToCustomData(__instance, worldUID);
