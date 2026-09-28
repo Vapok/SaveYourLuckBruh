@@ -22,7 +22,7 @@ internal static class StorageManager
 
     public static void SaveToCustomData(Player player, long worldUID)
     {
-        if (player == null)
+        if (player == null || player.m_customData == null)
         {
             return;
         }
@@ -69,7 +69,7 @@ internal static class StorageManager
 
     public static void LoadFromCustomData(Player player, long worldUID)
     {
-        if (player == null)
+        if (player == null || player.m_customData == null)
         {
             return;
         }
