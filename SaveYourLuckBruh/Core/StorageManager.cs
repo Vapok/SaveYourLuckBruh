@@ -12,6 +12,7 @@ internal static class StorageManager
     private const string ModPrefix = "vapok.mods.SaveYourLuckBruh";
 
     private static bool _isLoaded;
+    private static bool _hasLoggedNullCustomDataError;
 
     public static bool IsLoaded => _isLoaded;
 
@@ -22,10 +23,22 @@ internal static class StorageManager
 
     public static void SaveToCustomData(Player player, long worldUID)
     {
-        if (player == null || player.m_customData == null)
+        if (player == null)
         {
             return;
         }
+
+        if (player.m_customData == null)
+        {
+            if (!_hasLoggedNullCustomDataError)
+            {
+                _hasLoggedNullCustomDataError = true;
+                SaveYourLuckBruh.Log.Error($"Player.m_customData dictionary is null for player '{player.GetPlayerName()}'. Unable to save persistent bad luck data.");
+            }
+            return;
+        }
+
+        _hasLoggedNullCustomDataError = false;
 
         string storageKey = GetStorageKey(worldUID);
 
@@ -69,8 +82,14 @@ internal static class StorageManager
 
     public static void LoadFromCustomData(Player player, long worldUID)
     {
-        if (player == null || player.m_customData == null)
+        if (player == null)
         {
+            return;
+        }
+
+        if (player.m_customData == null)
+        {
+            SaveYourLuckBruh.Log.Error($"Player.m_customData dictionary is null for player '{player.GetPlayerName()}'. Unable to load persistent bad luck data.");
             return;
         }
 
