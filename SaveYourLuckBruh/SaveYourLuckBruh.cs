@@ -58,7 +58,6 @@ public class SaveYourLuckBruh : BaseUnityPlugin, IPluginInfo
         {
             Tagline = "Persists vanilla Valheim pseudo-random drop counters so your bad luck equity is never lost across game sessions or world travels.",
             ShowOnStartup = ConfigRegistry.ShowSplashOnStartup,
-            EnableTelemetry = ConfigRegistry.EnableTelemetry,
         });
 
         if (GUIManager.IsHeadless())
