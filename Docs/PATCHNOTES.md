@@ -1,3 +1,7 @@
+# 1.0.1 - Compatibility & Patch Sequencing
+* **Harmony Patch Ordering Alignment (`FejdStartupPatches`)**:
+  * Updated `FejdStartupAwakePatch` on `FejdStartup.Awake` to order `[HarmonyAfter]` `vapok.common.LocalizationManager` and `[HarmonyBefore]` `vapok.common.ItemManager` alongside legacy `org.bepinex.helpers.*` identifiers.
+
 # 1.0.0 - Initial Release
 * **Architecture & Persistence**:
   * Serializes `CharacterDrop.s_pseudoCounter` into `Player.m_customData` scoped by `ZNet.instance.GetWorldUID()`.
