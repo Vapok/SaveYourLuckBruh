@@ -1,3 +1,6 @@
+# 1.0.2 - Compatibility Stability
+* **Compatibility Stability**: Updated dependencies for third party mod compatibilities.
+
 # 1.0.1 - Compatibility & Patch Sequencing
 * **Harmony Patch Ordering Alignment (`FejdStartupPatches`)**:
   * Updated `FejdStartupAwakePatch` on `FejdStartup.Awake` to order `[HarmonyAfter]` `vapok.common.LocalizationManager` and `[HarmonyBefore]` `vapok.common.ItemManager` alongside legacy `org.bepinex.helpers.*` identifiers.
