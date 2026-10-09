@@ -1,3 +1,8 @@
+# 1.0.3 - Dependency Updates & Stability
+* **Dependency & Engine Alignment**:
+  * Updated internalized dependency `Vapok.Valheim.Common` to 3.1017.1.
+  * Aligned game assembly references to Valheim 1.0.17.
+
 # 1.0.2 - Compatibility Stability
 * **Compatibility Stability**: Updated dependencies for third party mod compatibilities.
 
