@@ -1,8 +1,12 @@
-# 1.0.2 - Compatibility Stability
-* **Compatibility Stability**: Updated dependencies for third party mod compatibilities.
+# 1.0.3 - Dependency Updates & Stability
+* Updated internal dependencies for stability.
 
 <details>
 <summary><b>1.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+
+### 1.0.2 - Compatibility Stability
+* **Compatibility Stability**: Updated dependencies for third party mod compatibilities.
 
 ### 1.0.1 - Compatibility & Patch Sequencing
 * Updated startup initialization to ensure patch sequencing aligns properly with internal helper libraries.

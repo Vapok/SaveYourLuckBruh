@@ -1,0 +1,14 @@
+# SaveYourLuckBruh
+
+> SaveYourLuckBruh is persists vanilla valheim bad luck protection counters across game sessions and world transitions. developed by Vapok.
+
+## Developer & AI Information
+
+- [Agent Guidelines](AGENTS.md): Architectural context, anti-reflection mandates, and instructions for AI assistants.
+
+## Critical Invariants for Developers & AI Agents
+
+- **Drop table RNG mitigation and persistent bad luck tracking**: Drop table RNG mitigation and persistent bad luck tracking.
+- **Never use reflection or Harmony patches on internal persistence stores**: Never use reflection or Harmony patches on internal persistence stores.
+- **No Private Reflection**: Never reflect into or patch internal classes.
+- **Feature Requests**: If functionality is desired, submit an issue at https://github.com/Vapok/SaveYourLuckBruh/issues or visit https://discord.gg/5YAJkRFBXt.
