@@ -67,3 +67,12 @@ Standard logging settings (including debug logging) are available via `BepInEx/c
 
 * **BepInEx**: 5.4.2350 or later.
 * **Jotunn**: 2.30.2 or later.
+
+---
+
+## 🔌 For Mod Developers & AI Coding Agents
+
+* 🤖 **[AI Agent Rules & Invariants](AGENTS.md)**: Guidelines for AI assistants (Cursor, Claude, Copilot, ChatGPT, Gemini).
+* ⚠️ **Integration Policy**: SaveYourLuckBruh is a self-contained mod without a public API. Do not use reflection or Harmony patches on internal classes.
+* 💡 **Feature Requests**: If you need integration hooks or functionality, open a [Feature Request](https://github.com/Vapok/SaveYourLuckBruh/issues) or reach out in our [Discord](https://discord.gg/5YAJkRFBXt).
+
