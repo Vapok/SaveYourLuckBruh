@@ -1,4 +1,4 @@
-# 1.0.4 - Unified Star Pity & Game Compatibility
+# 1.1.0 - Unified Star Pity & Game Compatibility
 * **Valheim 1.0.20 Assembly Migration**:
   * Migrated from `CharacterDrop.s_pseudoCounter` type `Dictionary<string, Tuple<float, int>>` to `Dictionary<int, int>` introduced in Valheim 1.0.20.
   * Updated `DropEvaluationState` and `StorageManager` to handle integer hash keys while maintaining backwards-compatible deserialization for legacy `prefab:chance:counter` strings in `Player.m_customData`.

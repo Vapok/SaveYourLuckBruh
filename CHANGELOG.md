@@ -1,4 +1,4 @@
-# 1.0.4 - Unified Star Pity & Game Compatibility
+# 1.1.0 - Unified Star Pity & Game Compatibility
 * **Valheim 1.0.20 Support**: Updated for compatibility with the latest game patch.
 * **Unified Star Progress**: Enemies with 0, 1, or 2 stars now share the same bad luck counter for rare trophy drops instead of splitting your progress.
 * **Star Enemy Bonus**: Defeating stronger star enemies advances your bad luck counter faster.
