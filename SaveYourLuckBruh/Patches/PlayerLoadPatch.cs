@@ -7,6 +7,19 @@ namespace SaveYourLuckBruh.Patches;
 [HarmonyPatch(typeof(Player), nameof(Player.Load))]
 internal static class PlayerLoadPatch
 {
+    private static void Prefix(Player __instance)
+    {
+        if (!ConfigRegistry.Enabled.Value)
+        {
+            return;
+        }
+
+        if (FejdStartup.instance != null || Player.m_localPlayer == null)
+        {
+            CharacterDrop.s_pseudoCounter.Clear();
+        }
+    }
+
     private static void Postfix(Player __instance)
     {
         if (!ConfigRegistry.Enabled.Value)

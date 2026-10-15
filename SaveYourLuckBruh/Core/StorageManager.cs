@@ -54,20 +54,17 @@ internal static class StorageManager
         StringBuilder stringBuilder = new StringBuilder();
         bool isFirst = true;
 
-        foreach (KeyValuePair<string, Tuple<float, int>> entry in CharacterDrop.s_pseudoCounter)
+        foreach (KeyValuePair<int, int> entry in CharacterDrop.s_pseudoCounter)
         {
             if (!isFirst)
             {
                 stringBuilder.Append(EntryDelimiter);
             }
 
-            string prefabName = entry.Key;
-            float chance = entry.Value.Item1;
-            int counter = entry.Value.Item2;
+            int hash = entry.Key;
+            int counter = entry.Value;
 
-            stringBuilder.Append(prefabName);
-            stringBuilder.Append(FieldDelimiter);
-            stringBuilder.Append(chance.ToString("R", CultureInfo.InvariantCulture));
+            stringBuilder.Append(hash.ToString(CultureInfo.InvariantCulture));
             stringBuilder.Append(FieldDelimiter);
             stringBuilder.Append(counter.ToString(CultureInfo.InvariantCulture));
 
@@ -94,15 +91,19 @@ internal static class StorageManager
         }
 
         string storageKey = GetStorageKey(worldUID);
-        CharacterDrop.s_pseudoCounter.Clear();
         _isLoaded = true;
 
         if (!player.m_customData.TryGetValue(storageKey, out string serializedData) || string.IsNullOrEmpty(serializedData))
         {
-            SaveYourLuckBruh.Log.Debug($"No persistent bad luck counters found in Player.m_customData for world {worldUID.ToString(CultureInfo.InvariantCulture)}; starting fresh.");
+            SaveYourLuckBruh.Log.Debug($"No persistent bad luck counters found in Player.m_customData for world {worldUID.ToString(CultureInfo.InvariantCulture)}; retaining native counters.");
+            if (CharacterDrop.s_pseudoCounter.Count > 0)
+            {
+                SaveToCustomData(player, worldUID);
+            }
             return;
         }
 
+        CharacterDrop.s_pseudoCounter.Clear();
         string[] entries = serializedData.Split(EntryDelimiter);
         int loadedCount = 0;
 
@@ -115,23 +116,37 @@ internal static class StorageManager
             }
 
             string[] fields = entry.Split(FieldDelimiter);
-            if (fields.Length != 3)
+            if (fields.Length == 2)
             {
-                SaveYourLuckBruh.Log.Warning($"Skipping malformed bad luck entry '{entry}' for world {worldUID.ToString(CultureInfo.InvariantCulture)}.");
-                continue;
+                if (int.TryParse(fields[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out int hash) &&
+                    int.TryParse(fields[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out int counter))
+                {
+                    CharacterDrop.s_pseudoCounter[hash] = counter;
+                    loadedCount++;
+                }
+                else
+                {
+                    SaveYourLuckBruh.Log.Warning($"Failed to parse values for bad luck entry '{entry}'.");
+                }
             }
-
-            string prefabName = fields[0];
-            if (float.TryParse(fields[1], NumberStyles.Float, CultureInfo.InvariantCulture, out float chance) &&
-                int.TryParse(fields[2], NumberStyles.Integer, CultureInfo.InvariantCulture, out int counter))
+            else if (fields.Length == 3)
             {
-                CharacterDrop.s_pseudoCounter[prefabName] = new Tuple<float, int>(chance, counter);
-                loadedCount++;
-                SaveYourLuckBruh.Log.Debug($"Restored bad luck counter for {prefabName} -> chance: {chance.ToString("P1", CultureInfo.InvariantCulture)}, remaining: {counter.ToString(CultureInfo.InvariantCulture)}.");
+                string prefabName = fields[0];
+                if (float.TryParse(fields[1], NumberStyles.Float, CultureInfo.InvariantCulture, out float chance) &&
+                    int.TryParse(fields[2], NumberStyles.Integer, CultureInfo.InvariantCulture, out int counter))
+                {
+                    int hash = prefabName.GetStableHashCode() + (int)(chance * 1000f);
+                    CharacterDrop.s_pseudoCounter[hash] = counter;
+                    loadedCount++;
+                }
+                else
+                {
+                    SaveYourLuckBruh.Log.Warning($"Failed to parse legacy bad luck entry '{entry}'.");
+                }
             }
             else
             {
-                SaveYourLuckBruh.Log.Warning($"Failed to parse values for bad luck entry '{entry}'.");
+                SaveYourLuckBruh.Log.Warning($"Skipping malformed bad luck entry '{entry}' for world {worldUID.ToString(CultureInfo.InvariantCulture)}.");
             }
         }
 

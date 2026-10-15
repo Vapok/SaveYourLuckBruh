@@ -1,3 +1,19 @@
+# 1.1.0 - Unified Star Pity & Game Compatibility
+* **Valheim 1.0.20 Assembly Migration**:
+  * Migrated from `CharacterDrop.s_pseudoCounter` type `Dictionary<string, Tuple<float, int>>` to `Dictionary<int, int>` introduced in Valheim 1.0.20.
+  * Updated `DropEvaluationState` and `StorageManager` to handle integer hash keys while maintaining backwards-compatible deserialization for legacy `prefab:chance:counter` strings in `Player.m_customData`.
+* **Unified Star-Level Pity Architecture**:
+  * Vanilla 1.0.20 hashes `s_pseudoCounter` as `hash(prefabName) + (chance * 1000)`. Because star levels multiply drop chance, 0-star and 1-star enemies create disconnected keys, while 2-star enemies exceed the 30% cutoff and are disqualified from pseudo-drops.
+  * In `CharacterDropPatch.Prefix`, the mod maps base countdown progress into vanilla's expected `starHash` for 1-star mobs.
+  * In `CharacterDropPatch.Postfix`, temporary star hashes are stripped to avoid save file pollution. Base progress is updated with star-weighted decrements (1-star = 2x weight, 2-star = 4x weight).
+  * 2-star enemies that fail standard RNG advance base pity and trigger guaranteed drops when the threshold is reached.
+  * Any drop from any star tier resets the unified base counter, preventing unintended back-to-back pity drops.
+* **Character Preview Static Leak Prevention**:
+  * In `PlayerLoadPatch.Prefix`, `CharacterDrop.s_pseudoCounter.Clear()` is invoked when loading outside active gameplay or during `FejdStartup` character preview to prevent static collection merging across characters.
+  * Synchronized `FejdStartupAwakePatch` on `FejdStartup.Awake` to ensure clean dictionary state on return to main menu.
+* **Co-op Attacker Attribution**:
+  * In `CharacterDropPatch.Postfix`, restored host's bad luck counter if the kill was delivered by an ally or the environment, preventing local player pity consumption during co-op sessions.
+
 # 1.0.3 - Dependency Updates & Stability
 * **Dependency & Engine Alignment**:
   * Updated internalized dependency `Vapok.Valheim.Common` to 3.1017.1.
