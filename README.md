@@ -2,7 +2,7 @@
 
 # 🍀 SaveYourLuckBruh
 
-### *Persists vanilla Valheim pseudo-random drop counters so your bad luck equity is never lost across game sessions or world travels.*
+### *Unifies and fixes vanilla Valheim pseudo-random drop counters so bad luck equity is never fragmented or lost across game sessions, world travels, or star tiers.*
 
 [![GitHub Release](https://img.shields.io/github/v/release/Vapok/SaveYourLuckBruh?include_prereleases&logo=github&style=for-the-badge)](https://github.com/Vapok/SaveYourLuckBruh/releases)
 [![Thunderstore Version](https://img.shields.io/thunderstore/v/Vapok/SaveYourLuckBruh?logo=thunderstore&style=for-the-badge)](https://thunderstore.io/c/valheim/p/Vapok/SaveYourLuckBruh/)
@@ -15,9 +15,11 @@
 
 </div>
 
-In Valheim, rare item drops (such as trophies and rare materials) feature an internal "bad luck protection" system designed to prevent prolonged dry streaks. However, in the vanilla game, this counter is stored purely in temporary memory and resets to zero every time you close the game.
+In Valheim, rare item drops (such as trophies and rare materials) utilize an internal pseudo-random countdown (`s_pseudoCounter`) to guarantee drops after a set number of kills. 
 
-**SaveYourLuckBruh** fixes this by saving your bad luck progress directly into your character save file, preserving your hard-earned drop progress across restarts and across different worlds.
+In Patch 1.0.20, Iron Gate added basic character persistence for this dictionary and attempted to scale trophy drop rates with monster stars. However, their implementation introduced severe mechanical flaws: pity counters are split across star tiers, 2-star enemies are excluded from pity entirely, and the static dictionary leaks across characters on the character select screen.
+
+**SaveYourLuckBruh** fixes these issues by unifying pity progression across all star tiers, isolating character saves from menu preview leaks, preserving per-world progression, and protecting your pity counters in co-op.
 
 ---
 
@@ -29,50 +31,63 @@ In Valheim, rare item drops (such as trophies and rare materials) feature an int
 
 </div>
 
-## 🎯 The Problem
+## 🎯 The Problem with Vanilla 1.0.20
 
-Vanilla Valheim uses a hidden countdown (`s_pseudoCounter`) for any item with a drop rate of 30% or lower. Every time you kill an eligible creature without getting the rare item, the countdown ticks closer to a **guaranteed drop**.
+In Patch 1.0.20, Iron Gate made two major changes to `CharacterDrop`:
+1. They serialized `CharacterDrop.s_pseudoCounter` into the `.fch` character save file.
+2. They allowed monster star levels to multiply trophy drop chances.
 
-### Example: Hunting Cultist Trophies
-1. **The Math**: A Cultist Trophy has a base 10% drop chance. The game rolls an internal countdown between 1 and 20 kills.
-2. **Session 1**: You clear Frost Caves and defeat 18 Cultists without seeing a trophy drop. You are now 1 or 2 kills away from a guaranteed trophy.
-3. **The Flaw**: You log off for the night and close Valheim.
-4. **Session 2 (Vanilla)**: You boot up Valheim tomorrow. **Your 18 kills are gone.** The game re-rolls a brand-new countdown from scratch. If you repeatedly play in short 1–2 hour sessions, you might suffer dozens of dry kills because your bad luck equity never survives a game restart.
+While this addressed the basic issue of counters resetting on logout, their implementation created three critical problems:
+
+### 1. Star-Level Pity Fragmentation
+Iron Gate changed the dictionary key to a compound hash: `hash(prefabName) + (chance * 1000)`. Because chance scales with star level (0-star = 10%, 1-star = 20%, 2-star = 40%):
+* A 0-star Cultist and a 1-star Cultist write to completely different dictionary entries.
+* Kills on 0-star and 1-star enemies do not pool together. If you kill 8 0-stars and 2 1-stars, neither counter advances the other.
+* Because 2-star Cultists have a 40% drop chance, they exceed vanilla's 30% cutoff (`chance <= 0.3f`). **2-star enemies are completely disqualified from pseudo drops.** They do not advance pity, and if a 2-star drops a trophy, your 0-star counter does not reset—giving you an unintended duplicate drop shortly after.
+
+### 2. Static Memory Leak / Cross-Character Pollution
+`CharacterDrop.s_pseudoCounter` is a `static` dictionary. In `Player.Load`, vanilla inserts saved entries without ever calling `.Clear()`. Because `Player.Load` is executed during character preview in the main menu, cycling through characters on the start screen merges all their counters together into memory. Whichever character you launch into the world inherits the combined counters of every previewed character.
+
+### 3. Multiplayer ZDO Attribution & World Bleed
+Only the network owner of a creature's `ZNetView` executes drop calculations. In co-op, an ally landing a kill can consume your personal countdown. Furthermore, vanilla counters are tied globally to the character file with zero world scoping, allowing players to farm pity in local worlds and cash it in on multiplayer servers.
 
 ---
 
 ## 💡 The Solution
 
-**SaveYourLuckBruh** automatically saves your active bad luck counters into your character's native custom save data (`Player.m_customData`):
-
-* 💾 **Persistent Across Restarts**: When you exit Valheim and launch it again the next day, your exact remaining countdown is restored.
-* 🌍 **World-Scoped Progress**: Counters are tracked per unique World ID. Hunting Cultists in your solo world will not bleed into or reset your progress on a multiplayer server.
-* ⚔️ **Attacker Attribution**: In co-op play, your bad luck countdown is only consumed when you (or your tamed pets) deliver the lethal blow—an ally landing a kill won't drain your personal bad luck equity.
-* 🛡️ **Zero Corrupted Saves**: Stored entirely within vanilla character fields. If you ever uninstall the mod, your character file (`.fch`) remains 100% intact and uncorrupted.
-* 🔌 **Client-Side Only**: Does not need to be installed on dedicated servers. Works seamlessly in singleplayer, co-op, or multiplayer servers without affecting unmodded players.
+| Feature | Vanilla 1.0.20 Behavior | SaveYourLuckBruh Behavior |
+| :--- | :--- | :--- |
+| **Unified Star Pity** | Star tiers have separate counters; 2-star mobs excluded. | All star tiers advance a single unified pity counter per item. |
+| **Star Difficulty Weighting** | 1-star kills advance 1-star counter by 1. | 1-star kills count as 2 progress; 2-star kills count as 4 progress. |
+| **2-Star Guarantee** | 2-star mobs cannot trigger guaranteed bad luck drops. | 2-star mobs advance pity and trigger guaranteed drops if threshold is hit. |
+| **Counter Reset on Drop** | Dropping a trophy on a 1-star mob leaves 0-star counter intact. | Any drop of the target item from any star tier resets the unified counter. |
+| **Character Select Isolation** | Previews in the main menu merge counters across characters. | Clears static dictionary in menu; keeps characters fully isolated. |
+| **World Isolation** | Counters are global across all solo and server worlds. | Stores per-world snapshots in `Player.m_customData` scoped by World UID. |
+| **Co-op Attribution** | Host/ZDO owner loses pity counter regardless of killer. | Preserves local player's pity counter when allies make the kill. |
 
 ---
 
 ## ⚙️ Configuration
 
-**SaveYourLuckBruh** is an install-and-forget mod. It requires no functional configuration or gameplay tweaking to work. 
+**SaveYourLuckBruh** is an install-and-forget mod. It requires no functional configuration to work.
 
-Standard logging settings (including debug logging) are available via `BepInEx/config/vapok.mods.SaveYourLuckBruh.cfg`:
-
-* **Enable Debug Mode**: Outputs detailed log statements to `LogOutput.log` showing when counters load, decrement, trigger drops, and save.
+Standard logging settings are available in `BepInEx/config/vapok.mods.SaveYourLuckBruh.cfg`:
+* **Enable SaveYourLuckBruh**: Master toggle to enable or disable mod functionality.
+* **Enable Debug Mode**: Logs real-time counter changes, star weight calculations, resets, and attribution in `LogOutput.log`.
 
 ---
 
 ## 🤝 Compatibility & Requirements
 
-* **BepInEx**: 5.4.2350 or later.
+* **Valheim**: 1.0.20 or later.
+* **BepInEx**: 5.4.2351 or later.
 * **Jotunn**: 2.30.2 or later.
+* **Client-Side Only**: Does not need to be installed on dedicated servers. Works in singleplayer and multiplayer.
 
 ---
 
 ## 🔌 For Mod Developers & AI Coding Agents
 
-* 🤖 **[AI Agent Rules & Invariants](AGENTS.md)**: Guidelines for AI assistants (Cursor, Claude, Copilot, ChatGPT, Gemini).
+* 🤖 **[AI Agent Rules & Invariants](AGENTS.md)**: Technical guidelines and repository invariants.
 * ⚠️ **Integration Policy**: SaveYourLuckBruh is a self-contained mod without a public API. Do not use reflection or Harmony patches on internal classes.
-* 💡 **Feature Requests**: If you need integration hooks or functionality, open a [Feature Request](https://github.com/Vapok/SaveYourLuckBruh/issues) or reach out in our [Discord](https://discord.gg/5YAJkRFBXt).
-
+* 💡 **Feature Requests**: Report bugs or suggest features on [GitHub Issues](https://github.com/Vapok/SaveYourLuckBruh/issues) or in [Discord](https://discord.gg/5YAJkRFBXt).

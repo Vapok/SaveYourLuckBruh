@@ -1,4 +1,5 @@
 using HarmonyLib;
+using SaveYourLuckBruh.Core;
 
 namespace SaveYourLuckBruh.Patches;
 
@@ -12,6 +13,8 @@ internal class FejdStartupPatches
         private static void Prefix()
         {
             SaveYourLuckBruh.Waiter.ValheimIsAwake(true);
+            CharacterDrop.s_pseudoCounter.Clear();
+            StorageManager.Clear();
         }
     }
 }
