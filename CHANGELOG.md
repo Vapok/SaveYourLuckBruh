@@ -1,15 +1,19 @@
-# 1.1.0 - Unified Star Pity & Game Compatibility
+# 1.1.1 - Dependency Updates & Valheim 1.0.20 Alignment
+* **Compatibility**: Updated internal dependencies for stability and Valheim 1.0.20 compatibility.
+
+<details>
+<summary><b>1.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+
+
+### 1.1.0 - Unified Star Pity & Game Compatibility
 * **Valheim 1.0.20 Support**: Updated for compatibility with the latest game patch.
 * **Unified Star Progress**: Enemies with 0, 1, or 2 stars now share the same bad luck counter for rare trophy drops instead of splitting your progress.
 * **Star Enemy Bonus**: Defeating stronger star enemies advances your bad luck counter faster.
 * **Character Isolation**: Fixed a vanilla game issue where browsing characters on the main menu mixed up their bad luck progress.
 
-# 1.0.3 - Dependency Updates & Stability
+### 1.0.3 - Dependency Updates & Stability
 * Updated internal dependencies for stability.
-
-<details>
-<summary><b>1.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
-
 
 ### 1.0.2 - Compatibility Stability
 * **Compatibility Stability**: Updated dependencies for third party mod compatibilities.
