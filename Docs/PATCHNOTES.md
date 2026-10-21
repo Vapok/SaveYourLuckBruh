@@ -1,3 +1,11 @@
+# 1.1.2 - Bug Fixes & Co-op Drop Protection
+* **New Character Counter Cleansing (`FejdStartupNewCharacterDonePatch`)**:
+  * Added Harmony prefix on `FejdStartup.OnNewCharacterDone` calling `StorageManager.Clear()` to wipe `CharacterDrop.s_pseudoCounter` before `PlayerProfile.SavePlayerData(Player)` serializes the new profile, preventing carry-over of previewed character counters.
+* **Drop Evaluation State Snapshot Ordering (`CharacterDropPatch.Prefix`)**:
+  * Relocated snapshotting of `initialCounters` in `CharacterDropPatch.Prefix` to occur after missing base counters are initialized in `CharacterDrop.s_pseudoCounter`. Prevents `initialBaseCount` from defaulting to 0 in postfix and triggering premature pity on first-time 1★ and 2★ kills.
+* **Co-op Counter Preservation Guard (`CharacterDropPatch.Postfix`)**:
+  * Updated ally attacker check to `!isLocalPlayer && !isPlayerPet && isOtherPlayer && !didDrop`, ensuring that successful pity drops reset the unified threshold normally while still preserving the local player's counter when an ally kill does not yield a drop.
+
 # 1.1.1 - Dependency Updates & Valheim 1.0.20 Alignment
 * **Dependency & Engine Alignment**:
   * Updated internalized dependency `Vapok.Valheim.Common` to 3.1020.1.
