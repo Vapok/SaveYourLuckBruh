@@ -27,8 +27,6 @@ internal static class CharacterDropPatch
             attacker = character.m_lastHit.GetAttacker();
         }
 
-        Dictionary<int, int> initialCounters = new Dictionary<int, int>(CharacterDrop.s_pseudoCounter);
-
         int level = character != null ? character.GetLevel() : 1;
         int levelMultiplier = Mathf.Max(1, (int)Mathf.Pow(2f, level - 1));
 
@@ -64,6 +62,8 @@ internal static class CharacterDropPatch
                 CharacterDrop.s_pseudoCounter[starHash] = starRemaining;
             }
         }
+
+        Dictionary<int, int> initialCounters = new Dictionary<int, int>(CharacterDrop.s_pseudoCounter);
 
         __state = new DropEvaluationState(attacker, initialCounters);
     }
