@@ -182,7 +182,7 @@ internal static class CharacterDropPatch
                 }
             }
 
-            if (!isLocalPlayer && !isPlayerPet && isOtherPlayer)
+            if (!isLocalPlayer && !isPlayerPet && isOtherPlayer && !didDrop)
             {
                 CharacterDrop.s_pseudoCounter[baseHash] = initialBaseCount;
                 SaveYourLuckBruh.Log.Debug($"Preserved local player pity counter for {prefabName} ({initialBaseCount.ToString(CultureInfo.InvariantCulture)}) because kill was made by {attackerLabel}.");
