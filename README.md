@@ -91,3 +91,19 @@ Standard logging settings are available in `BepInEx/config/vapok.mods.SaveYourLu
 * 🤖 **[AI Agent Rules & Invariants](AGENTS.md)**: Technical guidelines and repository invariants.
 * ⚠️ **Integration Policy**: SaveYourLuckBruh is a self-contained mod without a public API. Do not use reflection or Harmony patches on internal classes.
 * 💡 **Feature Requests**: Report bugs or suggest features on [GitHub Issues](https://github.com/Vapok/SaveYourLuckBruh/issues) or in [Discord](https://discord.gg/5YAJkRFBXt).
+
+---
+
+## 🤖 AI Disclosure & Transparency Audit
+
+In accordance with mod store's various AI policies, below is the full transparency breakdown for **SaveYourLuckBruh**:
+
+* **Audit Status**: `AI GENERATED`
+* **Weighted LLM Score**: `65.0%`
+
+| Category | Evaluated Surface | LLM Score | Status |
+| :--- | :--- | :--- | :--- |
+| **C# Assembly & Logic** | Decompiled C# source (89 files) | `90.0%` | Forensic analysis indicates approximately 90% of the C# codebase is LLM-influenced, exhibiting standard Vapok boilerplate framework wrappers and robust invariant formatting idioms across 89% of checked lines. |
+| **Package Manifest & Structure** | Manifest, structure & icon (v1.1.3) | `50.0%` | Manifest.json and package structure are clean and valid, but storefront icon.png is an AI-generated digital comic illustration rendering fantasy characters and baked-in typography (Case B). |
+| **Documentation & Copywriting** | Package documentation (6436 chars) | `95.0%` | README.md is extensively structured and polished by an AI assistant, featuring systematic emoji headers, comprehensive Markdown comparison tables, and professional technical copywriting. |
+| **Visual & Audio Media** | In-package Unity & media assets | `0.0%` | The package contains zero in-mod UnityFS asset bundles, zero embedded textures or audio files, and zero procedural asset synthesis as a pure code mod. |

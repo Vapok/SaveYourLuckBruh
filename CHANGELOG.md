@@ -1,10 +1,15 @@
-# 1.1.2 - Bug Fixes & Co-op Drop Protection
-* **New Character Isolation**: Fixed an issue where creating a new character could inherit bad luck drop progress from the previously previewed character.
-* **Starred Enemy Pity Progress**: Fixed an issue where the first starred kill for an unencountered item could prematurely trigger a guaranteed or near-guaranteed drop.
-* **Co-op Ally Drop Reset**: Fixed an issue where rare drops could drop repeatedly on consecutive ally kills in multiplayer.
+# 1.1.3 - Valheim 1.0.21 Update & Dependency Alignment
+* **Documentation**: Added AI Mod Checker transparency audit disclosure to README.
+* **Compatibility**: Marked incompatible with NoPopUpsInMyValheim, and updated dependencies for Valheim 1.0.21 and BepInEx 5.4.2360.
 
 <details>
 <summary><b>1.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+
+### 1.1.2 - Bug Fixes & Co-op Drop Protection
+* **New Character Isolation**: Fixed an issue where creating a new character could inherit bad luck drop progress from the previously previewed character.
+* **Starred Enemy Pity Progress**: Fixed an issue where the first starred kill for an unencountered item could prematurely trigger a guaranteed or near-guaranteed drop.
+* **Co-op Ally Drop Reset**: Fixed an issue where rare drops could drop repeatedly on consecutive ally kills in multiplayer.
 
 ### 1.1.1 - Dependency Updates & Valheim 1.0.20 Alignment
 * **Compatibility**: Updated internal dependencies for stability and Valheim 1.0.20 compatibility.
