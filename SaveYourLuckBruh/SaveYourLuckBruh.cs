@@ -19,11 +19,11 @@ namespace SaveYourLuckBruh;
 [BepInPlugin(_pluginId, _displayName, _version)]
 [BepInDependency(Jotunn.Main.ModGuid)]
 [BepInDependency("com.ValheimModding.YamlDotNetDetector")]
-public class SaveYourLuckBruh : BaseUnityPlugin, IPluginInfo
+public class SaveYourLuckBruh : VapokModBase, IPluginInfo
 {
     private const string _pluginId = "vapok.mods.SaveYourLuckBruh";
     private const string _displayName = "SaveYourLuckBruh";
-    private const string _version = "1.1.2";
+    private const string _version = "1.1.3";
     public static bool ValheimAwake;
     public static Waiting Waiter;
 

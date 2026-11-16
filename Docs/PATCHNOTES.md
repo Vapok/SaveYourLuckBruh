@@ -1,3 +1,9 @@
+# 1.1.3 - Valheim 1.0.21 Update & Dependency Alignment
+* **Dependency & Engine Alignment**:
+  * Inherited `VapokModBase` to declare `[BepInIncompatibility("IAmOnTheInternetAndItIsScary.NoPopUpsInMyValheim")]`.
+  * Updated internalized dependency `Vapok.Valheim.Common` to 3.1021.2.
+  * Aligned game assembly references to Valheim 1.0.21 and BepInEx 5.4.2360.
+
 # 1.1.2 - Bug Fixes & Co-op Drop Protection
 * **New Character Counter Cleansing (`FejdStartupNewCharacterDonePatch`)**:
   * Added Harmony prefix on `FejdStartup.OnNewCharacterDone` calling `StorageManager.Clear()` to wipe `CharacterDrop.s_pseudoCounter` before `PlayerProfile.SavePlayerData(Player)` serializes the new profile, preventing carry-over of previewed character counters.
