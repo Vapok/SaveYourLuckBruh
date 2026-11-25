@@ -1,3 +1,8 @@
+# 1.1.4 - Valheim 1.0.30 Update & Dependency Alignment
+* **Dependency & Engine Alignment**:
+  * Updated internalized dependency `Vapok.Valheim.Common` to 3.1030.1.
+  * Aligned game assembly references to Valheim 1.0.30.
+
 # 1.1.3 - Valheim 1.0.21 Update & Dependency Alignment
 * **Dependency & Engine Alignment**:
   * Inherited `VapokModBase` to declare `[BepInIncompatibility("IAmOnTheInternetAndItIsScary.NoPopUpsInMyValheim")]`.

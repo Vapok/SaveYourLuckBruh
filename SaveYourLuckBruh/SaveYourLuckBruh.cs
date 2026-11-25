@@ -23,7 +23,7 @@ public class SaveYourLuckBruh : VapokModBase, IPluginInfo
 {
     private const string _pluginId = "vapok.mods.SaveYourLuckBruh";
     private const string _displayName = "SaveYourLuckBruh";
-    private const string _version = "1.1.3";
+    private const string _version = "1.1.4";
     public static bool ValheimAwake;
     public static Waiting Waiter;
 

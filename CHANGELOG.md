@@ -1,9 +1,12 @@
-# 1.1.3 - Valheim 1.0.21 Update & Dependency Alignment
-* **Documentation**: Added AI transparency audit disclosure to README.
-* **Compatibility**: Updated dependencies for Valheim 1.0.21 and BepInEx 5.4.2360.
+# 1.1.4 - Valheim 1.0.30 Update & Dependency Alignment
+* **Compatibility**: Updated dependencies for Valheim 1.0.30 stability.
 
 <details>
 <summary><b>1.0 Changelog History (Valheim Release)</b> (<i>click to expand</i>)</summary>
+
+### 1.1.3 - Valheim 1.0.21 Update & Dependency Alignment
+* **Documentation**: Added AI transparency audit disclosure to README.
+* **Compatibility**: Updated dependencies for Valheim 1.0.21 and BepInEx 5.4.2360.
 
 
 ### 1.1.2 - Bug Fixes & Co-op Drop Protection
